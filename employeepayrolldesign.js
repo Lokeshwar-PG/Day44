@@ -6,19 +6,18 @@ function onSubmitClick() {
     var year = document.getElementById("year").value;
     var notes = document.getElementById("notes").value;
 
-    var genders = document.getElementById("genders");
-    var selectedGender;
-    for(var i=0; i < genders.gender.length; i++) {
-        if(genders.gender[i].checked) {
-            selectedGender = genders.gender[i].value;
-            break;
-        }
-    }
+    var profile = document.querySelector('input[name="profile"]:checked').value;
+    var gender = document.querySelector('input[name="gender"]:checked').value;
+
+    var departments = [];
+    var departmentCheckboxes = document.querySelectorAll('input[name="department"]:checked');
+    departmentCheckboxes.forEach(department => departments.push(department.value));
 
     var userDetails = {
         name: name,
-        // gender: selectedGender,
-        // department: department,
+        profile: profile,
+        gender: gender,
+        departments: departments,
         salary: salary,
         startDate: `${day}/${month}/${year}`,
         notes: notes
@@ -32,6 +31,29 @@ function loadDate() {
     var name = document.getElementById("name").value;
     var userDetails = localStorage.getItem(name);
     var userDetails = JSON.parse(userDetails);
+
+    var profiles = document.querySelectorAll('input[name="profile"]');
+    profiles.forEach(profile => {
+        if(profile.value == userDetails.profile) {
+            profile.checked = true;
+        }
+    })
+
+    var genders = document.querySelectorAll('input[name="gender"]');
+    genders.forEach(gender => {
+        if(gender.value == userDetails.gender) {
+            gender.checked = true;
+        }
+    })
+
+    var departments = document.querySelectorAll('input[name="department"]');
+    departments.forEach(department => {
+        if(userDetails.departments.includes(department.value)) {
+            department.checked = true;
+        }
+    })
+
+    document.getElementById("name").value = userDetails.name;
     document.getElementById("salary").value = userDetails.salary;
     var date = userDetails.startDate.split('/');
     document.getElementById("day").value = date[0];
